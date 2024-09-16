@@ -1,0 +1,88 @@
+import React, { useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+
+const EditExpense = ({ expenses, updateExpense, deleteExpense }) => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const dateRef = useRef('');
+  const itemRef = useRef('');
+  const amountRef = useRef('');
+  const descriptionRef = useRef('');
+
+  useEffect(() => {
+    const currentExpense = expenses.find((expense) => expense.id === id);
+    if (currentExpense) {
+      dateRef.current.value = currentExpense.date;
+      itemRef.current.value = currentExpense.item;
+      amountRef.current.value = currentExpense.amount;
+      descriptionRef.current.value = currentExpense.description;
+    }
+  }, [id, expenses]);
+
+  // 수정 내용 저장
+  const handleModify = (e) => {
+    e.preventDefault();
+    const modifiedExpense = {
+      id,
+      date: dateRef.current.value,
+      item: itemRef.current.value,
+      amount: amountRef.current.value,
+      description: descriptionRef.current.value,
+    };
+    updateExpense(modifiedExpense);
+    navigate('/');
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('정말 삭제하시겠습니까?')) {
+      deleteExpense(id);
+      navigate('/');
+    }
+  };
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  return (
+    <div>
+      <h1>지출 항목 수정</h1>
+      <form onSubmit={handleModify}>
+        <div>
+          <label>날짜:</label>
+          <input
+            type="date"
+            ref={dateRef}
+          />
+        </div>
+        <div>
+          <label>항목:</label>
+          <input
+            type="text"
+            ref={itemRef}
+          />
+        </div>
+        <div>
+          <label>금액:</label>
+          <input
+            type="number"
+            ref={amountRef}
+          />
+        </div>
+        <div>
+          <label>설명:</label>
+          <input
+            type="text"
+            ref={descriptionRef}
+          />
+        </div>
+        <button type="submit">수정</button>  {/* 수정 버튼 */}
+      </form>
+      <button onClick={handleDelete} style={{ color: 'red' }}>삭제</button>  {/* 삭제 버튼 */}
+      <button onClick={handleBack}>뒤로가기</button>  {/* 뒤로가기 버튼 */}
+    </div>
+  );
+};
+
+export default EditExpense;
