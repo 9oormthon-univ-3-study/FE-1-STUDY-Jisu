@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useExpenses } from '../context/ExpenseContext';  
 
-const EditExpense = ({ expenses, updateExpense, deleteExpense }) => {
+const EditExpense = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { expenses, updateExpense, deleteExpense } = useExpenses(); 
 
   const dateRef = useRef('');
   const itemRef = useRef('');
@@ -20,7 +22,6 @@ const EditExpense = ({ expenses, updateExpense, deleteExpense }) => {
     }
   }, [id, expenses]);
 
-  // 수정 내용 저장
   const handleModify = (e) => {
     e.preventDefault();
     const modifiedExpense = {
@@ -51,36 +52,24 @@ const EditExpense = ({ expenses, updateExpense, deleteExpense }) => {
       <form onSubmit={handleModify}>
         <div>
           <label>날짜:</label>
-          <input
-            type="date"
-            ref={dateRef}
-          />
+          <input type="date" ref={dateRef} />
         </div>
         <div>
           <label>항목:</label>
-          <input
-            type="text"
-            ref={itemRef}
-          />
+          <input type="text" ref={itemRef} />
         </div>
         <div>
           <label>금액:</label>
-          <input
-            type="number"
-            ref={amountRef}
-          />
+          <input type="number" ref={amountRef} />
         </div>
         <div>
           <label>설명:</label>
-          <input
-            type="text"
-            ref={descriptionRef}
-          />
+          <input type="text" ref={descriptionRef} />
         </div>
-        <button type="submit">수정</button>  {/* 수정 버튼 */}
+        <button type="submit">수정</button>
       </form>
-      <button onClick={handleDelete} style={{ color: 'red' }}>삭제</button>  {/* 삭제 버튼 */}
-      <button onClick={handleBack}>뒤로가기</button>  {/* 뒤로가기 버튼 */}
+      <button onClick={handleDelete} style={{ color: 'red' }}>삭제</button>
+      <button onClick={handleBack}>뒤로가기</button>
     </div>
   );
 };

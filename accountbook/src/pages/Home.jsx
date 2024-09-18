@@ -1,8 +1,8 @@
+import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import MonthTabs from '../components/MonthTabs';
-import fakeData from '../assets/fakeData.json';
 import AddExpense from '../components/AddExpense';
-import { Link } from 'react-router-dom';
+import { useExpenses } from '../context/ExpenseContext';
 
 const filterExpensesByMonth = (expenses, month) => {
   return expenses.filter((expense) => {
@@ -11,19 +11,15 @@ const filterExpensesByMonth = (expenses, month) => {
   });
 };
 
-const Home = ({ updateExpense }) => {
+const Home = () => {
+  const { expenses } = useExpenses(); 
   const [activeMonth, setActiveMonth] = useState(new Date().getMonth());
-  const [expenses, setExpenses] = useState(fakeData);
   const [filteredExpenses, setFilteredExpenses] = useState([]);
 
   useEffect(() => {
     const filtered = filterExpensesByMonth(expenses, activeMonth);
     setFilteredExpenses(filtered);
   }, [activeMonth, expenses]);
-
-  const addExpense = (newExpense) => {
-    setExpenses([...expenses, newExpense]);
-  };
 
   return (
     <div>
@@ -44,7 +40,7 @@ const Home = ({ updateExpense }) => {
                 <p><strong>항목:</strong> {expense.item}</p>
                 <p><strong>금액:</strong> {expense.amount}원</p>
                 <p><strong>설명:</strong> {expense.description}</p>
-                <Link to={`/edit/${expense.id}`}>수정</Link> {/* ID를 포함한 링크 */}
+                <Link to={`/edit/${expense.id}`}>수정</Link> {/*  */}
                 <hr />
               </li>
             ))}
@@ -54,7 +50,7 @@ const Home = ({ updateExpense }) => {
         )}
       </div>
 
-      <AddExpense addExpense={addExpense} />
+      <AddExpense /> {/*  */}
     </div>
   );
 };
